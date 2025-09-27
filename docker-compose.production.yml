@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  wordpress:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    ports:
+      - "8080:80"
+    restart: unless-stopped
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE:-wordpress}
+      WORDPRESS_DB_USER: ${MYSQL_USER:-wordpress}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
+      WORDPRESS_TABLE_PREFIX: wp_
+    volumes:
+      # Only mount the dynamic content, not core WordPress files
+      - ./wp-data/wp-content:/var/www/html/wp-content
+      - ./wp-data/uploads:/var/www/html/wp-content/uploads
+    depends_on:
+      - db
+    networks:
+      - wp-network
+
+  db:
+    image: mariadb:10.6.4-focal
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-wordpress}
+      MYSQL_USER: ${MYSQL_USER:-wordpress}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:-wordpress}
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - wp-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD:-rootpassword}
+    depends_on:
+      - db
+    networks:
+      - wp-network
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  wp-network:
+    driver: bridge

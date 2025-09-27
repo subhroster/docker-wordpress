@@ -1,0 +1,20 @@
+# Development Dockerfile - builds on top of your local wp-data
+FROM wordpress:6.2.2-apache
+
+# Install additional PHP extensions if needed
+RUN docker-php-ext-install mysqli pdo_mysql
+
+# Copy your current WordPress installation into the image
+# This creates a snapshot of your site at build time
+COPY ./wp-data/ /var/www/html/
+
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
+
+# Expose port
+EXPOSE 80
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost/ || exit 1

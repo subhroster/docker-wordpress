@@ -1,0 +1,19 @@
+# Production WordPress - Lightweight approach
+FROM wordpress:6.2.2-apache
+
+# Install PHP extensions
+RUN docker-php-ext-install mysqli pdo_mysql
+
+# Copy only essential files (not the entire wp-content)
+# We'll mount wp-content as a volume instead
+COPY --chown=www-data:www-data ./wp-data/wp-config.php /var/www/html/wp-config.php
+
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost/wp-admin/install.php || exit 1
+
+EXPOSE 80
