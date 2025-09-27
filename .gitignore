@@ -1,0 +1,84 @@
+# Git ignore file for WordPress Docker project
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# WordPress files
+wp-content/uploads/*
+wp-content/cache/*
+wp-content/backup-db/*
+wp-content/backups/*
+wp-content/upgrade/*
+wp-content/plugins/*
+wp-content/themes/*
+
+# Keep the uploads directory structure but ignore files
+!wp-content/uploads/.gitkeep
+!wp-content/plugins/.gitkeep
+!wp-content/themes/.gitkeep
+
+# Database dumps
+*.sql
+*.sql.gz
+*.sql.zip
+
+# WordPress core files (if you decide to mount the entire WordPress)
+wp-admin/
+wp-includes/
+wp-config.php
+*.php
+
+# Logs
+*.log
+logs/
+error_log
+access_log
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+.tmp/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Node modules (if you add any Node.js tools)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Composer (if you use Composer for PHP dependencies)
+composer.phar
+composer.lock
+vendor/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Docker volumes (if you create local volume directories)
+docker-volumes/
+volumes/
+
+# WordPress data directory (contains WordPress files, uploads, etc.)
+wp-data/

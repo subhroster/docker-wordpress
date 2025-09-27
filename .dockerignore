@@ -1,0 +1,46 @@
+# Docker ignore file for WordPress Docker project
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# Environment files
+.env
+.env.example
+
+# WordPress files that should not be in the container
+wp-content/uploads/*
+wp-content/cache/*
+wp-content/backup-db/*
+wp-content/backups/*
+wp-content/upgrade/*
+wp-content/plugins/*
+wp-content/themes/*
+
+# Development files
+node_modules
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Documentation
+README.md
+docs/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
